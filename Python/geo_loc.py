@@ -27,8 +27,10 @@ class GeoLoc:
         """
         loc = country
         if state:
+            # Add the state to the query
             loc = f"{state},{loc}"
         if city:
+            # Add the city to the query
             loc = f"{city},{loc}"
 
         params = {"q": loc,
@@ -39,6 +41,7 @@ class GeoLoc:
             raise Exception(f"Error in geo loc request. Got error code {response.status_code}: {response.content}")
         loc_result = response.json()
         if len(loc_result) > 0:
+            # We found a location. Take the first one returned:
             self.lat = loc_result[0]["lat"]
             self.lon = loc_result[0]["lon"]
             self.country = loc_result[0].get("country")

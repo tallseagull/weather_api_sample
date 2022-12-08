@@ -29,6 +29,7 @@ class Weather:
             raise Exception(f"Error in request. Got error code {response.status_code}: {response.content}")
         weather = response.json()
 
+        # Extract the main components from the response:
         result = {'temp': weather['main']['temp'],
                   'humidity': weather['main']['humidity'],
                   'wind_speed': weather['wind']['speed'],

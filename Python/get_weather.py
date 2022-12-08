@@ -29,10 +29,12 @@ if __name__ == '__main__':
     weather = Weather(creds['api_key'])
     geo_loc = GeoLoc(creds['api_key'])
 
+    # Open the locations file and read the lines
     with open(args.locs_file, 'r') as fp:
         reader = DictReader(fp)
         # Now go over the rows in the CSV input and add the weather for each:
         for row in reader:
+            # Try to get the location from the row
             if(geo_loc.find_location(row['country'], row['state'], row['city'])):
                 # Found the location. Add the weather:
                 weather_data = weather.current_weather(geo_loc)
@@ -40,6 +42,10 @@ if __name__ == '__main__':
                 row['temp'] = weather_data['temp']
                 row['wind_speed'] = weather_data['wind_speed']
                 row['clouds'] = weather_data['clouds']
+            else:
+                # Didn't find the location. Write the row with an error to the console:
+                print(f"Could not find location for {row}")
+                continue
             # Now write the result row to the output:
             if writer is not None:
                 writer.writerow(row)
